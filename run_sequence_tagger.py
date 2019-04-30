@@ -54,17 +54,6 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids, l
 
     embedding = tf.reshape(embedding, shape=[-1, hidden_size])  # [batch_size x max_seq_length, hidden_size]
 
-    '''hidden_weights = tf.get_variable(name="hidden_weights",
-                                     shape=[hidden_size // 2, hidden_size],
-                                     initializer=tf.truncated_normal_initializer(stddev=0.02))
-
-    hidden_bias = tf.get_variable(name="hidden_bias",
-                                  shape=[hidden_size // 2],
-                                  initializer=tf.zeros_initializer())
-
-    embedding = tf.matmul(embedding, hidden_weights, transpose_b=True)
-    embedding = tf.nn.bias_add(embedding, hidden_bias)'''
-
     output_weights = tf.get_variable(name="output_weights",
                                      shape=[num_labels, hidden_size],
                                      initializer=tf.truncated_normal_initializer(stddev=0.02))
@@ -153,15 +142,15 @@ def model_fn_builder(bert_config, num_labels, init_ckpt, learning_rate, num_trai
         elif mode == tf.estimator.ModeKeys.EVAL:
 
             def metric_fn(label_ids_, logits_, predicts_, mask_, num_labels_):
-                # predictions = tf.math.argmax(logits_, axis=-1, output_type=tf.int32)
+                predictions = tf.math.argmax(logits_, axis=-1, output_type=tf.int32)
                 eval_loss = tf.metrics.mean_squared_error(labels=label_ids_, predictions=predicts_)
-                '''cm = seq_metrics.streaming_confusion_matrix(labels=label_ids_,
+                cm = seq_metrics.streaming_confusion_matrix(labels=label_ids_,
                                                             predictions=predictions,
-                                                            num_classes=num_labels_,  # -1
-                                                            weights=mask_)'''
+                                                            num_classes=num_labels_ - 1,
+                                                            weights=mask_)
                 return {
                     "eval_loss": eval_loss,
-                    # "confusion_matrix": cm
+                    "confusion_matrix": cm
                 }
 
             eval_metrics = (metric_fn, [label_ids, logits, predicts, input_mask, num_labels])
@@ -290,12 +279,12 @@ def main(_):
                                                     drop_remainder=False)
 
         result = estimator.evaluate(input_fn=eval_input_fn)
-        '''tf.logging.info("***** Evaluation results *****")
+        tf.logging.info("***** Evaluation results *****")
         confusion_matrix = result["confusion_matrix"]
-        p, r, f = seq_metrics.calculate(confusion_matrix, len(label_list))
+        p, r, f = seq_metrics.calculate(confusion_matrix, len(label_list) - 1)
         tf.logging.info("Precision = %s", str(p))
         tf.logging.info("Recall = %s", str(r))
-        tf.logging.info("F1 = %s", str(f))'''
+        tf.logging.info("F1 = %s", str(f))
 
     if FLAGS.do_predict:
         with open(FLAGS.output_dir + '/label2id.pkl', 'rb') as rf:

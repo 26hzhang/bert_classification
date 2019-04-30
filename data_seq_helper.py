@@ -71,8 +71,7 @@ class NerProcessor(DataProcessor):
                             continue
                         label = contends.split("\t")[-1].strip()
                         label_counter[label] += 1
-            # labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
-            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X"]
+            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
             return labels
 
         # default: CoNLL-2002/2003 NER labels (used only if you have the same datasets or the datasets hold the same
@@ -281,16 +280,16 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
                 labels.append("X")
 
     # only Account for [CLS] with "- 1".
-    if len(tokens) >= max_seq_length:  # -1
-        tokens = tokens[0:max_seq_length]  # -1
-        labels = labels[0:max_seq_length]  # -1
+    if len(tokens) >= max_seq_length - 1:
+        tokens = tokens[0:(max_seq_length - 1)]
+        labels = labels[0:(max_seq_length - 1)]
 
     ntokens = []
     segment_ids = []
     label_ids = []
-    '''ntokens.append("[CLS]")
+    ntokens.append("[CLS]")
     segment_ids.append(0)
-    label_ids.append(label_map["[CLS]"])'''
+    label_ids.append(label_map["[CLS]"])
 
     for i, token in enumerate(tokens):
         ntokens.append(token)
