@@ -4,9 +4,9 @@ Use google BERT to do token-level and sentence-level classification.
 
 ## Requirements
 - tensorflow>=1.11.0 (or tensorflow-gpu>=1.11.0)
-- official tensorflow based bert code, get the code `https://github.com/google-research/bert.git` and place it under 
-this folder.
-- pre-trained bert models (according to the tasks), after downloading, place the model folder under `checkpoint/`.
+- official tensorflow based bert code, get the code [`https://github.com/google-research/bert.git`](
+https://github.com/google-research/bert.git) and place it under this repository.
+- pre-trained bert models (according to the tasks), after downloading, place the model dir under `checkpoint/`.
 
 ```
 bert_classification/
