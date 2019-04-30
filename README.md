@@ -64,7 +64,7 @@ Test F1 | - | - | - | -
 Dataset | CR | MR | SST2 | SST5 | SUBJ | TREC
 :---: | :---: | :---: | :---: | :---: | :---: | :---:
 Dev Accuracy (%) | - | - | - | - | - | -
-Test Accuracy (%) | - | - | - | - | 97.3 | -
+Test Accuracy (%) | - | - | 93.5 | - | 97.3 | -
 
 ## Reference
 - [[google-research/bert]](https://github.com/google-research/bert).
