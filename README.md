@@ -45,6 +45,27 @@ that [MNLI](https://www.nyu.edu/projects/bowman/multinli/) and [XNLI](https://ww
 datasets are implemented by the official BERT already, see `run_classifier.py` in [[google-research/bert]](
 https://github.com/google-research/bert).
 
+## Experiment Results
+
+**Token level classification datasets**
+
+Dataset | CoNLL-2000 en Chunk | CoNLL-2002 es NER | CoNLL-2002 nl NER | CoNLL-2003 en NER
+:--- | :---: | :---: | :---: | :---:
+Dev Precision | - | - | - | -
+Dev Recall | - | - | - | -
+Dev F1 | - | - | - | -
+Test Precision | - | - | - | -
+Test Recall | - | - | - | -
+Test F1 | - | - | - | -
+
+
+**Sentence level classification datasets**
+
+Dataset | CR | MR | SST2 | SST5 | SUBJ | TREC
+:---: | :---: | :---: | :---: | :---: | :---: | :---:
+Dev Accuracy (%) | - | - | - | - | - | -
+Test Accuracy (%) | - | - | - | - | 97.3 | -
+
 ## Reference
 - [[google-research/bert]](https://github.com/google-research/bert).
 - [[macanv/BERT-BiLSTM-CRF-NER]](https://github.com/macanv/BERT-BiLSTM-CRF-NER).
