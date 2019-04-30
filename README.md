@@ -4,6 +4,7 @@ Use google BERT to do token-level and sentence-level classification.
 
 ## Requirements
 - tensorflow>=1.11.0 (or tensorflow-gpu>=1.11.0)
+- numpy>=1.14.4
 - official tensorflow based bert code, get the code [`https://github.com/google-research/bert.git`](
 https://github.com/google-research/bert.git) and place it under this repository.
 - pre-trained bert models (according to the tasks), after downloading, place the model dir under `checkpoint/`.
@@ -102,6 +103,8 @@ python3 run_text_classifier.py --task_name mrpc  \  # task name
 
 ## Experiment Results
 
+> All the experiments are running on `1` GeForce GTX 1080 Ti GPU.
+
 **Token level classification datasets**
 
 Dataset | CoNLL-2000 en Chunk | CoNLL-2002 es NER | CoNLL-2002 nl NER | CoNLL-2003 en NER
@@ -130,3 +133,5 @@ Test Accuracy (%) | - | - | -
 - [[macanv/BERT-BiLSTM-CRF-NER]](https://github.com/macanv/BERT-BiLSTM-CRF-NER).
 - [[Kyubyong/bert_ner]](https://github.com/Kyubyong/bert_ner).
 - [[kyzhouhzau/BERT-NER]](https://github.com/kyzhouhzau/BERT-NER).
+- [[nyu-mll/GLUE-baselines]](https://github.com/nyu-mll/GLUE-baselines).
+- [[facebookresearch/SentEval]](https://github.com/facebookresearch/SentEval).

@@ -7,7 +7,6 @@ from bert import tokenization
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
-
     def __init__(self, guid, text_a, text_b=None, label=None):
         """Constructs a InputExample.
 
@@ -68,7 +67,6 @@ class DataProcessor(object):
 
 class MrpcProcessor(DataProcessor):
     """Processor for the MRPC data set (GLUE version)."""
-
     def get_train_examples(self, data_dir):
         """See base class."""
         return self._create_examples(self._read_tsv(os.path.join(data_dir, "msr_paraphrase_train.txt")), "train")
@@ -112,8 +110,7 @@ class MrpcProcessor(DataProcessor):
 
 
 class SickProcessor(DataProcessor):
-    """Processor for the MRPC data set (GLUE version)."""
-
+    """Processor for the SICK data set."""
     def get_train_examples(self, data_dir):
         """See base class."""
         return self._create_examples(self._read_tsv(os.path.join(data_dir, "SICK_train.txt")), "train")
@@ -156,7 +153,7 @@ class SickProcessor(DataProcessor):
 
 
 class SnliProcessor(DataProcessor):
-
+    """Processor for the SNLI data set."""
     def get_train_examples(self, data_dir):
         return self._create_examples(self._read_data(os.path.join(data_dir, "train")), "train")
 
@@ -233,8 +230,8 @@ class Sst2Processor(DataProcessor):
         examples = []
         for (i, line) in enumerate(lines):
             guid = "%s-%s" % (set_type, i)
-            text = tokenization.convert_to_unicode(line[1])
-            label = tokenization.convert_to_unicode(line[0])
+            text = tokenization.convert_to_unicode(line[0])
+            label = tokenization.convert_to_unicode(line[1])
             examples.append(InputExample(guid=guid, text_a=text, text_b=None, label=label))
         return examples
 
@@ -246,10 +243,10 @@ class Sst2Processor(DataProcessor):
                 line = line.strip()
                 if len(line) == 0:
                     continue
-                tokens = line.split(" ")
-                label = tokens[0].strip()
-                sentence = " ".join(tokens[1:])
-                lines.append((label, sentence))
+                line = line.split("\t")
+                if len(line) != 2:
+                    continue
+                lines.append(line)
         return lines
 
 
@@ -487,16 +484,13 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
     #  tokens:   [CLS] the dog is hairy . [SEP]
     #  type_ids: 0     0   0   0  0     0 0
     #
-    # Where "type_ids" are used to indicate whether this is the first
-    # sequence or the second sequence. The embedding vectors for `type=0` and
-    # `type=1` were learned during pre-training and are added to the wordpiece
-    # embedding vector (and position vector). This is not *strictly* necessary
-    # since the [SEP] token unambiguously separates the sequences, but it makes
-    # it easier for the model to learn the concept of sequences.
+    # Where "type_ids" are used to indicate whether this is the first sequence or the second sequence. The embedding
+    # vectors for `type=0` and `type=1` were learned during pre-training and are added to the wordpiece embedding
+    # vector (and position vector). This is not *strictly* necessary since the [SEP] token unambiguously separates the
+    # sequences, but it makes it easier for the model to learn the concept of sequences.
     #
-    # For classification tasks, the first vector (corresponding to [CLS]) is
-    # used as the "sentence vector". Note that this only makes sense because
-    # the entire model is fine-tuned.
+    # For classification tasks, the first vector (corresponding to [CLS]) is used as the "sentence vector". Note that
+    # this only makes sense because the entire model is fine-tuned.
     tokens = []
     segment_ids = []
     tokens.append("[CLS]")

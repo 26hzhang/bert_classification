@@ -3,15 +3,7 @@ import codecs
 import pickle
 import collections
 import tensorflow as tf
-from absl import logging
 from bert import tokenization
-
-
-def boolean_string(bool_str):
-    bool_str = bool_str.lstrip().rstrip().lower()
-    if bool_str not in {"false", "true"}:
-        raise ValueError("Not a valid boolean string!!!!!")
-    return bool_str == "true"
 
 
 class InputExample:
@@ -79,7 +71,8 @@ class NerProcessor(DataProcessor):
                             continue
                         label = contends.split("\t")[-1].strip()
                         label_counter[label] += 1
-            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
+            # labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
+            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X"]
             return labels
 
         # default: CoNLL-2002/2003 NER labels (used only if you have the same datasets or the datasets hold the same
@@ -288,24 +281,22 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
                 labels.append("X")
 
     # only Account for [CLS] with "- 1".
-    if len(tokens) >= max_seq_length - 1:
-        tokens = tokens[0:(max_seq_length - 1)]
-        labels = labels[0:(max_seq_length - 1)]
+    if len(tokens) >= max_seq_length:  # -1
+        tokens = tokens[0:max_seq_length]  # -1
+        labels = labels[0:max_seq_length]  # -1
 
     ntokens = []
     segment_ids = []
     label_ids = []
-    ntokens.append("[CLS]")
+    '''ntokens.append("[CLS]")
     segment_ids.append(0)
-    label_ids.append(label_map["[CLS]"])
+    label_ids.append(label_map["[CLS]"])'''
 
     for i, token in enumerate(tokens):
         ntokens.append(token)
         segment_ids.append(0)
         label_ids.append(label_map[labels[i]])
 
-    # after that we don't add "[SEP]" because we want a sentence don't have stop tag, because i think its not very
-    # necessary. Or if add "[SEP]" the model even will cause problem, special the crf layer was used.
     input_ids = tokenizer.convert_tokens_to_ids(ntokens)
     input_mask = [1] * len(input_ids)
 
@@ -325,20 +316,19 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
 
     # show processed examples
     if ex_index < 1:
-        logging.info("*** Example ***")
-        logging.info("guid: %s" % example.guid)
-        logging.info("tokens: %s" % " ".join([tokenization.printable_text(x) for x in tokens]))
-        logging.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-        logging.info("input_input_mask: %s" % " ".join([str(x) for x in input_mask]))
-        logging.info("segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
-        logging.info("label_ids: %s" % " ".join([str(x) for x in label_ids]))
+        tf.logging.info("*** Example ***")
+        tf.logging.info("guid: %s" % example.guid)
+        tf.logging.info("tokens: %s" % " ".join([tokenization.printable_text(x) for x in tokens]))
+        tf.logging.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
+        tf.logging.info("input_input_mask: %s" % " ".join([str(x) for x in input_mask]))
+        tf.logging.info("segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
+        tf.logging.info("label_ids: %s" % " ".join([str(x) for x in label_ids]))
 
     feature = InputFeatures(input_ids=input_ids,
                             input_mask=input_mask,
                             segment_ids=segment_ids,
                             label_ids=label_ids)
 
-    # we need ntokens because if we do predict it can help us return to original token.
     return feature, ntokens, label_ids
 
 
@@ -369,7 +359,7 @@ def filed_based_convert_examples_to_features(examples, label_list, max_seq_lengt
         features["label_ids"] = create_int_feature(feature.label_ids)
         tf_example = tf.train.Example(features=tf.train.Features(feature=features))
         writer.write(tf_example.SerializeToString())
-    # sentence token in each batch
+
     writer.close()
     return batch_tokens, batch_labels
 

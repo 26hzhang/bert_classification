@@ -149,9 +149,14 @@ def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
     processors = {"mrpc": data_cls_helper.MrpcProcessor,
+                  "snli": data_cls_helper.SnliProcessor,
+                  "sick": data_cls_helper.SickProcessor,
+                  "cr": data_cls_helper.CrProcessor,
+                  "mr": data_cls_helper.MrProcessor,
                   "subj": data_cls_helper.SubjProcessor,
                   "sst5": data_cls_helper.Sst5Processor,
-                  "sst2": data_cls_helper.Sst2Processor}
+                  "sst2": data_cls_helper.Sst2Processor,
+                  "trec": data_cls_helper.TrecProcessor}
 
     tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case, FLAGS.init_checkpoint)
 
