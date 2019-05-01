@@ -42,7 +42,7 @@ Dataset | Classes | Average sentence length | Train size | Dev size | Test size
 :---: | :---: | :---: | :---: | :---: | :---:
 CR | 2 | 19 | 3395 | - | 377
 MR | 2 | 20 | 9595 | - | 1066
-SST2 | 2 | 19 | 67349 | 872 | 1821
+SST2 | 2 | 11 | 67349 | 872 | 1821
 SST5 | 5 | 18 | 8544 | 1101 | 2210
 SUBJ | 2 | 23 | 9000 | - | 1000
 TREC | 6 | 10 | 5452 | - | 500

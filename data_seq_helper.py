@@ -12,9 +12,9 @@ class InputExample:
         Args:
           guid: Unique id for the example.
           text: string. The untokenized text of the first sequence. For single
-            sequence tasks, only this sequence must be specified.
+                sequence tasks, only this sequence must be specified.
           label: (Optional) string. The label of the example. This should be
-            specified for train and dev examples, but not for test examples.
+                specified for train and dev examples, but not for test examples.
         """
         self.guid = guid
         self.text = text
@@ -71,7 +71,8 @@ class NerProcessor(DataProcessor):
                             continue
                         label = contends.split("\t")[-1].strip()
                         label_counter[label] += 1
-            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
+            # labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
+            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()]
             return labels
 
         # default: CoNLL-2002/2003 NER labels (used only if you have the same datasets or the datasets hold the same
@@ -277,7 +278,8 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
             if m == 0:
                 labels.append(label)
             else:
-                labels.append("X")
+                labels.append("[PAD]")
+                # labels.append("X")
 
     # only Account for [CLS] with "- 1".
     if len(tokens) >= max_seq_length - 1:
@@ -289,7 +291,8 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
     label_ids = []
     ntokens.append("[CLS]")
     segment_ids.append(0)
-    label_ids.append(label_map["[CLS]"])
+    # label_ids.append(label_map["[CLS]"])
+    label_ids.append(label_map["[PAD]"])
 
     for i, token in enumerate(tokens):
         ntokens.append(token)
