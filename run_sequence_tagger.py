@@ -22,7 +22,7 @@ flags.DEFINE_string("output_dir", "checkpoint/conll2003_en", "output dir where t
 flags.DEFINE_bool("do_lower_case", False, "Whether to lower case the input text.")
 flags.DEFINE_integer("max_seq_length", 128, "The maximum total input sequence length after WordPiece tokenization.")
 flags.DEFINE_bool("do_train", True, "Whether to run training.")
-flags.DEFINE_bool("do_eval", True, "Whether to run eval on the dev set.")
+flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 flags.DEFINE_bool("do_predict", True, "Whether to run the model in inference mode on the test set.")
 flags.DEFINE_integer("batch_size", 32, "Total batch size for training.")
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
