@@ -71,8 +71,7 @@ class NerProcessor(DataProcessor):
                             continue
                         label = contends.split("\t")[-1].strip()
                         label_counter[label] += 1
-            # labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
-            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()]
+            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
             return labels
 
         # default: CoNLL-2002/2003 NER labels (used only if you have the same datasets or the datasets hold the same
@@ -278,26 +277,28 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
             if m == 0:
                 labels.append(label)
             else:
-                labels.append("[PAD]")
-                # labels.append("X")
+                labels.append("X")
 
     # only Account for [CLS] with "- 1".
-    if len(tokens) >= max_seq_length - 1:
-        tokens = tokens[0:(max_seq_length - 1)]
-        labels = labels[0:(max_seq_length - 1)]
+    if len(tokens) >= max_seq_length - 2:
+        tokens = tokens[0:(max_seq_length - 2)]
+        labels = labels[0:(max_seq_length - 2)]
 
     ntokens = []
     segment_ids = []
     label_ids = []
     ntokens.append("[CLS]")
     segment_ids.append(0)
-    # label_ids.append(label_map["[CLS]"])
-    label_ids.append(label_map["[PAD]"])
+    label_ids.append(label_map["[CLS]"])
 
     for i, token in enumerate(tokens):
         ntokens.append(token)
         segment_ids.append(0)
         label_ids.append(label_map[labels[i]])
+
+    ntokens.append("[SEP]")
+    segment_ids.append(0)
+    label_ids.append(label_map["[SEP]"])
 
     input_ids = tokenizer.convert_tokens_to_ids(ntokens)
     input_mask = [1] * len(input_ids)
@@ -401,7 +402,7 @@ def _write_base(batch_tokens, id2label, prediction, batch_labels, wf, i):
     token = batch_tokens[i]
     predict = id2label[prediction]
     true_l = id2label[batch_labels[i]]
-    if token != "[PAD]" and token != "[CLS]" and true_l != "X":
+    if token != "[PAD]" and token != "[CLS]" and true_l != "X" and token != "[SEP]":
         if predict == "X" and not predict.startswith("##"):
             predict = "O"
         line = "{}\t{}\t{}\n".format(token, predict, true_l)
