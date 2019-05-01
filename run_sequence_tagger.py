@@ -1,7 +1,6 @@
 import os
 import pickle
 import subprocess
-import seq_metrics
 import tensorflow as tf
 from bert import modeling
 from bert import optimization
@@ -141,19 +140,13 @@ def model_fn_builder(bert_config, num_labels, init_ckpt, learning_rate, num_trai
 
         elif mode == tf.estimator.ModeKeys.EVAL:
 
-            def metric_fn(label_ids_, logits_, predicts_, mask_, num_labels_):
-                predictions = tf.math.argmax(logits_, axis=-1, output_type=tf.int32)
-                eval_loss = tf.metrics.mean_squared_error(labels=label_ids_, predictions=predicts_)
-                cm = seq_metrics.streaming_confusion_matrix(labels=label_ids_,
-                                                            predictions=predictions,
-                                                            num_classes=num_labels_ - 1,
-                                                            weights=mask_)
+            def metric_fn(label_ids_, predicts_, mask_):
+                eval_loss = tf.metrics.mean_squared_error(labels=label_ids_, predictions=predicts_, weights=mask_)
                 return {
                     "eval_loss": eval_loss,
-                    "confusion_matrix": cm
                 }
 
-            eval_metrics = (metric_fn, [label_ids, logits, predicts, input_mask, num_labels])
+            eval_metrics = (metric_fn, [label_ids, predicts, input_mask])
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(mode=mode,
                                                           loss=total_loss,
                                                           eval_metrics=eval_metrics)
@@ -280,11 +273,7 @@ def main(_):
 
         result = estimator.evaluate(input_fn=eval_input_fn)
         tf.logging.info("***** Evaluation results *****")
-        confusion_matrix = result["confusion_matrix"]
-        p, r, f = seq_metrics.calculate(confusion_matrix, len(label_list) - 1)
-        tf.logging.info("Precision = %s", str(p))
-        tf.logging.info("Recall = %s", str(r))
-        tf.logging.info("F1 = %s", str(f))
+        tf.logging.info("Eval loss: {}".format(result["eval_loss"]))
 
     if FLAGS.do_predict:
         with open(FLAGS.output_dir + '/label2id.pkl', 'rb') as rf:
