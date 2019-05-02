@@ -158,8 +158,8 @@ uncased).
 
 Dataset | MRPC | SICK | SNLI | CoLA
 :---: | :---: | :---: | :---: | :---:
-Dev Accuracy (%) | _N.A._ | 86.4 | - | 83.1
-Test Accuracy (%) | 84.7 | 87.0 | - | 78.9
+Dev Accuracy (%) | _N.A._ | 86.4 | 91.1 | 83.1
+Test Accuracy (%) | 84.7 | 87.0 | 90.7 | 78.9
 
 > All the tasks use [`uncased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
