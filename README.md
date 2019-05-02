@@ -7,7 +7,7 @@ Use google BERT to do token-level and sentence-level classification.
 - numpy>=1.14.4
 - official tensorflow based bert code, get the code [`https://github.com/google-research/bert.git`](
 https://github.com/google-research/bert.git) and place it under this repository.
-- pre-trained bert models (according to the tasks), after downloading, place the model dir under `checkpoint/`.
+- pre-trained bert models (according to the tasks), download and place to the `checkpoint/` directory.
 
 ```
 bert_classification/
@@ -15,9 +15,13 @@ bert_classification/
     |____ bert_ckpt/
     |____ checkpoint/
     |____ datasets/
+    |____ .gitignore
     |____ conlleval.pl
     |____ data_cls_helper.py
-    |____ ...
+    |____ data_seq_helper.py
+    |____ README.md
+    |____ run_sequence_tagger.py
+    |____ run_text_classifier.py
 ```
 
 ## Dataset Overview
@@ -98,7 +102,7 @@ python3 run_text_classifier.py --task_name mrpc  \  # task name
                                --do_eval True  \  # if evaluation
                                --do_predict True  \  # if prediction
                                --batch_size 32  \  # batch_size
-                               --num_train_epochs 6  \  # number of epochs
+                               --num_train_epochs 6  # number of epochs
 ```
 
 ## Experiment Results
@@ -109,10 +113,20 @@ python3 run_text_classifier.py --task_name mrpc  \  # task name
 
 Dataset | CoNLL-2000 en Chunk | CoNLL-2002 es NER | CoNLL-2002 nl NER | CoNLL-2003 en NER
 :---: | :---: | :---: | :---: | :---:
-Precision (%) | - | - | - | -
-Recall (%) | - | - | - | -
-F1 (%) | - | - | - | -
+Precision (%) | - | 89.0 | 89.8 | 92.0
+Recall (%) | - | 88.6 | 90.0 | 90.8
+F1 (%) | - | 88.8 | 89.9 | 91.4
 
+> CoNLL-2002 Spanish and Dutch NER use [`multi_cased_L-12_H-768_A-12.zip`](
+https://storage.googleapis.com/bert_models/2018_11_23/multi_cased_L-12_H-768_A-12.zip) pre-trained model (base, 
+multilingual, cased)  while CoNLL-2000 Chunk and CoNLL-2003 NER utilize [`cased_L-12_H-768_A-12.zip`](
+https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
+cased).
+
+The testing results on CoNLL-2003 English NER are lower than the reported score of the [paper](
+https://arxiv.org/pdf/1810.04805.pdf) (`91.4%` v.s. `92.4%`). As the paper says a `0.2%` difference is reasonable, 
+however, I got `1.0%` error. I think maybe some tricks are missing, for example, the parameters setting in 
+output classifier or data pre-processing strategies.
 
 **Sentence level classification datasets**
 
@@ -121,12 +135,20 @@ Dataset | CR | MR | SST2 | SST5 | SUBJ | TREC
 Dev Accuracy (%) | - | - | 91.3 | 50.1 | - | -
 Test Accuracy (%) | 89.2 | 85.4 | 93.5 | 53.3 | 97.3 | 96.6
 
+> All the tasks use [`uncased_L-12_H-768_A-12.zip`](
+https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
+uncased).
+
 **Natural language inference datasets**
 
-Dataset | MRPC | SICK | SNLI
-:---: | :---: | :---: | :---:
-Dev Accuracy (%) | - | - | -
-Test Accuracy (%) | - | - | -
+Dataset | MRPC | SICK | SNLI | CoLA
+:---: | :---: | :---: | :---: | :---:
+Dev Accuracy (%) | - | 86.4 | - | -
+Test Accuracy (%) | - | 87.0 | - | -
+
+> All the tasks use [`uncased_L-12_H-768_A-12.zip`](
+https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
+uncased).
 
 ## Reference
 - [[google-research/bert]](https://github.com/google-research/bert).
