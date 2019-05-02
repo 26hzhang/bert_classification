@@ -127,9 +127,9 @@ decode.
 
 Dataset | CoNLL2000 en | CoNLL2002 es | CoNLL2002 nl | CoNLL2003 en | zh 1 | zh 2
 :---: | :---: | :---: | :---: | :---: | :---: | :---:
-Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | - | 95.7
-Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | - | 95.7
-F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | - | 95.7
+Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | 77.9 | 95.7
+Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | 73.1 | 95.7
+F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | 75.5 | 95.7
 
 > CoNLL-2002 Spanish and Dutch NER use [`multi_cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_11_23/multi_cased_L-12_H-768_A-12.zip) pre-trained model (base, 
