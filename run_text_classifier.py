@@ -151,6 +151,7 @@ def main(_):
     processors = {"mrpc": data_cls_helper.MrpcProcessor,
                   "snli": data_cls_helper.SnliProcessor,
                   "sick": data_cls_helper.SickProcessor,
+                  "cola": data_cls_helper.ColaProcessor,
                   "cr": data_cls_helper.CrProcessor,
                   "mr": data_cls_helper.MrProcessor,
                   "subj": data_cls_helper.SubjProcessor,
@@ -196,6 +197,7 @@ def main(_):
     train_examples = None
     num_train_steps = None
     num_warmup_steps = None
+
     if FLAGS.do_train:
         train_examples = processor.get_train_examples(FLAGS.data_dir)
         num_train_steps = int(len(train_examples) / FLAGS.batch_size * FLAGS.num_train_epochs)

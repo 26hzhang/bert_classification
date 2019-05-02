@@ -71,7 +71,7 @@ class NerProcessor(DataProcessor):
                             continue
                         label = contends.split("\t")[-1].strip()
                         label_counter[label] += 1
-            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]", "[SEP]"]
+            labels = ["[PAD]"] + [label for label, _ in label_counter.most_common()] + ["X", "[CLS]"]
             return labels
 
         # default: CoNLL-2002/2003 NER labels (used only if you have the same datasets or the datasets hold the same
@@ -245,7 +245,7 @@ class PosProcessor(DataProcessor):
             return lines
 
 
-def convert_single_example(ex_index, example, label_list, max_seq_length, tokenizer, output_dir, mode):
+def convert_single_example(ex_index, example, label_list, max_seq_length, tokenizer, output_dir):
     """
     :param ex_index: example num
     :param example:
@@ -253,7 +253,6 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
     :param max_seq_length:
     :param tokenizer: WordPiece tokenization
     :param output_dir:
-    :param mode:
     :return: feature
 
     In this part we should rebuild input sentences to the following format.
@@ -335,8 +334,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
     return feature, ntokens, label_ids
 
 
-def filed_based_convert_examples_to_features(examples, label_list, max_seq_length, tokenizer, output_file, output_dir,
-                                             mode=None):
+def filed_based_convert_examples_to_features(examples, label_list, max_seq_length, tokenizer, output_file, output_dir):
     writer = tf.python_io.TFRecordWriter(output_file)
 
     batch_tokens, batch_labels = [], []
@@ -346,8 +344,7 @@ def filed_based_convert_examples_to_features(examples, label_list, max_seq_lengt
                                                              label_list=label_list,
                                                              max_seq_length=max_seq_length,
                                                              tokenizer=tokenizer,
-                                                             output_dir=output_dir,
-                                                             mode=mode)
+                                                             output_dir=output_dir)
         batch_tokens.extend(ntokens)
         batch_labels.extend(label_ids)
 
@@ -409,16 +406,10 @@ def _write_base(batch_tokens, id2label, prediction, batch_labels, wf, i):
         wf.write(line)
 
 
-def file_writer(output_predict_file, result, batch_tokens, batch_labels, id2label, use_crf):
+def file_writer(output_predict_file, result, batch_tokens, batch_labels, id2label):
     with open(output_predict_file, 'w') as wf:
-
-        if use_crf:
-            predictions = []
-            for m, pred in enumerate(result):
-                predictions.extend(pred)
-            for i, prediction in enumerate(predictions):
-                _write_base(batch_tokens, id2label, prediction, batch_labels, wf, i)
-
-        else:
-            for i, prediction in enumerate(result):
-                _write_base(batch_tokens, id2label, prediction, batch_labels, wf, i)
+        predictions = []
+        for m, pred in enumerate(result):
+            predictions.extend(pred)
+        for i, prediction in enumerate(predictions):
+            _write_base(batch_tokens, id2label, prediction, batch_labels, wf, i)

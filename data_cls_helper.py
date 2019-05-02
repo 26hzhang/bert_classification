@@ -94,8 +94,7 @@ class MrpcProcessor(DataProcessor):
             text_a = tokenization.convert_to_unicode(line[3])
             text_b = tokenization.convert_to_unicode(line[4])
             label = tokenization.convert_to_unicode(line[0])
-            examples.append(
-                InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+            examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return examples
 
     @staticmethod
@@ -155,13 +154,13 @@ class SickProcessor(DataProcessor):
 class SnliProcessor(DataProcessor):
     """Processor for the SNLI data set."""
     def get_train_examples(self, data_dir):
-        return self._create_examples(self._read_data(os.path.join(data_dir, "train")), "train")
+        return self._create_examples(self._read_data(data_dir, "train"), "train")
 
     def get_dev_examples(self, data_dir):
-        return self._create_examples(self._read_data(os.path.join(data_dir, "dev")), "dev")
+        return self._create_examples(self._read_data(data_dir, "dev"), "dev")
 
     def get_test_examples(self, data_dir):
-        return self._create_examples(self._read_data(os.path.join(data_dir, "test")), "test")
+        return self._create_examples(self._read_data(data_dir, "test"), "test")
 
     def get_labels(self):
         return ["contradiction", "entailment", "neutral"]
@@ -178,9 +177,9 @@ class SnliProcessor(DataProcessor):
         return examples
 
     @staticmethod
-    def _read_data(input_file):
+    def _read_data(input_file, file_name):
         # read sentence pair 1
-        with open("s1." + input_file, mode="r", encoding="utf-8") as f:
+        with open(input_file + "/s1." + file_name, mode="r", encoding="utf-8") as f:
             s1_list = []
             for line in f:
                 line = line.strip()
@@ -188,7 +187,7 @@ class SnliProcessor(DataProcessor):
                     continue
                 s1_list.append(line)
         # read sentence pair 2
-        with open("s2." + input_file, mode="r", encoding="utf-8") as f:
+        with open(input_file + "/s2." + file_name, mode="r", encoding="utf-8") as f:
             s2_list = []
             for line in f:
                 line = line.strip()
@@ -196,7 +195,7 @@ class SnliProcessor(DataProcessor):
                     continue
                 s2_list.append(line)
         # read label
-        with open("labels." + input_file, mode="r", encoding="utf-8") as f:
+        with open(input_file + "/labels." + file_name, mode="r", encoding="utf-8") as f:
             labels = []
             for line in f:
                 line = line.strip()
@@ -447,6 +446,49 @@ class CrProcessor(DataProcessor):
         return lines
 
 
+class ColaProcessor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        """See base class."""
+        return self._create_examples(
+            self._read_tsv(os.path.join(data_dir, "in_domain_train.tsv")), "train")
+
+    def get_dev_examples(self, data_dir):
+        """See base class."""
+        return self._create_examples(
+            self._read_tsv(os.path.join(data_dir, "in_domain_dev.tsv")), "dev")
+
+    def get_test_examples(self, data_dir):
+        """See base class."""
+        return self._create_examples(
+            self._read_tsv(os.path.join(data_dir, "out_of_domain_dev.tsv")), "test")
+
+    def get_labels(self):
+        return ["0", "1"]
+
+    @staticmethod
+    def _create_examples(lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            if set_type == "test" and i == 0:
+                continue
+            guid = "%s-%s" % (set_type, i)
+            text_a = tokenization.convert_to_unicode(line[3])
+            label = tokenization.convert_to_unicode(line[1])
+            examples.append(InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+        return examples
+
+    @staticmethod
+    def _read_tsv(input_file, quotechar=None):
+        """Reads a tab separated value file."""
+        with tf.gfile.Open(input_file, "r") as f:
+            reader = csv.reader(f, delimiter="\t", quotechar=quotechar)
+            lines = []
+            for line in reader:
+                lines.append(line)
+            return lines
+
+
 def convert_single_example(ex_index, example, label_list, max_seq_length, tokenizer):
     """Converts a single `InputExample` into a single `InputFeatures`."""
 
@@ -593,7 +635,7 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
         for name in list(example.keys()):
             t = example[name]
             if t.dtype == tf.int64:
-                t = tf.to_int32(t)
+                t = tf.cast(t, dtype=tf.int32)
             example[name] = t
 
         return example
@@ -610,7 +652,7 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
             d = d.shuffle(buffer_size=100)
 
         d = d.apply(
-            tf.contrib.data.map_and_batch(
+            tf.data.experimental.map_and_batch(
                 lambda record: _decode_record(record, name_to_features),
                 batch_size=batch_size,
                 drop_remainder=drop_remainder))

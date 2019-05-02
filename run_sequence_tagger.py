@@ -21,8 +21,8 @@ flags.DEFINE_string("output_dir", "checkpoint/conll2003_en", "output dir where t
 flags.DEFINE_bool("do_lower_case", False, "Whether to lower case the input text.")
 flags.DEFINE_integer("max_seq_length", 128, "The maximum total input sequence length after WordPiece tokenization.")
 flags.DEFINE_bool("do_train", True, "Whether to run training.")
-flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
-flags.DEFINE_bool("do_predict", True, "Whether to run the model in inference mode on the test set.")
+flags.DEFINE_bool("do_eval", True, "Whether to run eval on the dev set.")
+flags.DEFINE_bool("do_predict", True, "Whether to run the model in inference mode on the dev and test sets.")
 flags.DEFINE_integer("batch_size", 32, "Total batch size for training.")
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 flags.DEFINE_float("num_train_epochs", 6.0, "Total number of training epochs to perform.")
@@ -69,7 +69,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids, l
     if use_crf:
         with tf.variable_scope("crf_loss"):
             trans = tf.get_variable(name="transition", shape=[num_labels, num_labels],
-                                    initializer=modeling.create_initializer())
+                                    initializer=tf.truncated_normal_initializer(stddev=0.02))
             log_likelihood, transition = tf.contrib.crf.crf_log_likelihood(inputs=logits,
                                                                            tag_indices=labels,
                                                                            transition_params=trans,
@@ -142,9 +142,7 @@ def model_fn_builder(bert_config, num_labels, init_ckpt, learning_rate, num_trai
 
             def metric_fn(label_ids_, predicts_, mask_):
                 eval_loss = tf.metrics.mean_squared_error(labels=label_ids_, predictions=predicts_, weights=mask_)
-                return {
-                    "eval_loss": eval_loss,
-                }
+                return {"eval_loss": eval_loss}
 
             eval_metrics = (metric_fn, [label_ids, predicts, input_mask])
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(mode=mode,
@@ -280,8 +278,38 @@ def main(_):
             label2id = pickle.load(rf)
             id2label = {value: key for key, value in label2id.items()}
 
-        predict_examples = processor.get_test_examples(data_dir=FLAGS.data_dir)
+        '''Prediction on dev dataset'''
+        eval_examples = processor.get_dev_examples(data_dir=FLAGS.data_dir)
+        eval_file = os.path.join(FLAGS.output_dir, "eval.tf_record")
+        batch_tokens, batch_labels = filed_based_convert_examples_to_features(examples=eval_examples,
+                                                                              label_list=label_list,
+                                                                              max_seq_length=FLAGS.max_seq_length,
+                                                                              tokenizer=tokenizer,
+                                                                              output_file=eval_file,
+                                                                              output_dir=FLAGS.output_dir)
 
+        tf.logging.info("***** Running prediction on dev dataset *****")
+        tf.logging.info("  Num of Predicting examples = %d", len(eval_examples))
+        tf.logging.info("  Batch size = %d", FLAGS.batch_size)
+
+        eval_input_fn = file_based_input_fn_builder(input_file=eval_file,
+                                                    seq_length=FLAGS.max_seq_length,
+                                                    is_training=False,
+                                                    drop_remainder=False)
+
+        result = estimator.predict(input_fn=eval_input_fn)
+        output_predict_file = os.path.join(FLAGS.output_dir, "label_dev.txt")
+        file_writer(output_predict_file=output_predict_file,
+                    result=result,
+                    batch_tokens=batch_tokens,
+                    batch_labels=batch_labels,
+                    id2label=id2label)
+
+        # run evaluation script
+        subprocess.call("perl conlleval.pl -d '\t' < ./{}/label_dev.txt".format(FLAGS.output_dir), shell=True)
+
+        '''Prediction on test dataset'''
+        predict_examples = processor.get_test_examples(data_dir=FLAGS.data_dir)
         predict_file = os.path.join(FLAGS.output_dir, "predict.tf_record")
         batch_tokens, batch_labels = filed_based_convert_examples_to_features(examples=predict_examples,
                                                                               label_list=label_list,
@@ -289,7 +317,7 @@ def main(_):
                                                                               tokenizer=tokenizer,
                                                                               output_file=predict_file,
                                                                               output_dir=FLAGS.output_dir)
-        tf.logging.info("***** Running prediction *****")
+        tf.logging.info("***** Running prediction on test dataset *****")
         tf.logging.info("  Num of Predicting examples = %d", len(predict_examples))
         tf.logging.info("  Batch size = %d", FLAGS.batch_size)
 
@@ -304,8 +332,7 @@ def main(_):
                     result=result,
                     batch_tokens=batch_tokens,
                     batch_labels=batch_labels,
-                    id2label=id2label,
-                    use_crf=FLAGS.use_crf)
+                    id2label=id2label)
 
         # run evaluation script
         subprocess.call("perl conlleval.pl -d '\t' < ./{}/label_test.txt".format(FLAGS.output_dir), shell=True)
