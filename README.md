@@ -1,6 +1,6 @@
 # BERT Classification
 
-Use google BERT to do token-level and sentence-level classification.
+Use google BERT (tensorflow-based) to do token-level and sentence-level classification.
 
 ## Requirements
 - tensorflow>=1.11.0 (or tensorflow-gpu>=1.11.0)
@@ -26,48 +26,50 @@ bert_classification/
 
 ## Dataset Overview
 
-**Token level classification datasets (POS, Chunk and NER)**, (`CoNLL` dataset):
+**Token level classification datasets (POS, Chunk and NER)**:
 
 Dataset | Language | Classes | Training tokens | Dev tokens | Test tokens
 :---: | :---: | :---: | :---: | :---: | :---:
-CoNLL-2000 Chunk | English (en) | 23 | 211727 | - | 47377
+CoNLL-2000 Chunk | English (en) | 23 | 211727 | _N.A._ | 47377
 CoNLL-2002 NER | Spanish (es) | 9 | 207484 (18797) | 51645 (4351) | 52098 (3558)
 CoNLL-2002 NER | Dutch (nl) | 9 | 202931 (13344) | 37761 (2616) | 68994 (3941)
 CoNLL-2003 NER | English (en) | 9 | 204567 (23499) | 51578 (5942) | 46666 (5648)
 
-> `CoNLL-2000 Chunking` and `CoNLL-2002 NER` datasets are obtained from [[teropa/nlp/resources/corpora]](
-https://github.com/teropa/nlp/tree/master/resources/corpora), `CoNLL-2003 NER` dataset is obtained from 
+> _CoNLL-2000 Chunk_ and _CoNLL-2002 NER_ datasets are obtained from [[teropa/nlp/resources/corpora]](
+https://github.com/teropa/nlp/tree/master/resources/corpora), _CoNLL-2003 NER_ dataset is obtained from 
 [[synalp/NER/corpus/CoNLL-2003]](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003). All the lines in those 
 datasets are convert to `(word, label)` pairs with `\t` as separator and drop all the `-DOCSTART-` lines.
 
-**Sentence level classification datasets**, (`CR`, `MR`, `SST`, `SUBJ` and `TREC` datasets):
+**Sentence level classification datasets**:
 
 Dataset | Classes | Average sentence length | Train size | Dev size | Test size
 :---: | :---: | :---: | :---: | :---: | :---:
-CR | 2 | 19 | 3395 | - | 377
-MR | 2 | 20 | 9595 | - | 1066
+CR | 2 | 19 | 3395 | _N.A._ | 377
+MR | 2 | 20 | 9595 | _N.A._ | 1066
 SST2 | 2 | 11 | 67349 | 872 | 1821
 SST5 | 5 | 18 | 8544 | 1101 | 2210
-SUBJ | 2 | 23 | 9000 | - | 1000
-TREC | 6 | 10 | 5452 | - | 500
+SUBJ | 2 | 23 | 9000 | _N.A._ | 1000
+TREC | 6 | 10 | 5452 | _N.A._ | 500
 
-> All the datasets are converted to `utf-8` format. For the `SUBJ`, `MR` and `CR` datasets, `90%` for train, `10%` 
-for test, while the dev dataset is the duplicate of test dataset. For `TREC` dataset, the dev dataset is the duplicate 
+> All the datasets are converted to `utf-8` format. For the _SUBJ_, _MR_ and _CR_ datasets, `90%` for train, `10%` 
+for test, while the dev dataset is the duplicate of test dataset. For _TREC_ dataset, the dev dataset is the duplicate 
 of test dataset. Those datasets are obtained from [[facebookresearch/SentEval]](
 https://github.com/facebookresearch/SentEval).
 
-**Natural language inference (sentence pair classification) datasets**, (`MRPC`, `SICK` and `SNLI` datasets):
+**Natural language inference (sentence pair classification) datasets**:
 
 Dataset | Classes | Train size | Dev size | Test size
 :---: | :---: | :---: | :---: | :---:
 MRPC | 2 | 4077 | 1726 | 1726
 SICK | 3 | 4501 | 501 | 4928
 SNLI | 3 | 549367 | 9842 | 9824
+CoLA | 2 | 8551 | 527 | 516
 
-> Those datasets are obtained from [[facebookresearch/SentEval]](https://github.com/facebookresearch/SentEval). Note 
-that [MNLI](https://www.nyu.edu/projects/bowman/multinli/) and [XNLI](https://www.nyu.edu/projects/bowman/xnli/) 
-datasets are implemented by the official BERT already, see `run_classifier.py` in [[google-research/bert]](
-https://github.com/google-research/bert).
+> _MRPC_, _SICK_ and _SNLI_ are obtained from [[facebookresearch/SentEval]](
+https://github.com/facebookresearch/SentEval), _CoLA_ us obtained from [[nyu-mll/GLUE-baselines]](
+https://github.com/nyu-mll/GLUE-baselines). [_MNLI_](https://www.nyu.edu/projects/bowman/multinli/) and [_XNLI_](
+https://www.nyu.edu/projects/bowman/xnli/) datasets are implemented by the official BERT already, see 
+`run_classifier.py` in [[google-research/bert]](https://github.com/google-research/bert).
 
 ## Usage
 For token-level classification, run:
@@ -113,9 +115,9 @@ python3 run_text_classifier.py --task_name mrpc  \  # task name
 
 Dataset | CoNLL-2000 en Chunk | CoNLL-2002 es NER | CoNLL-2002 nl NER | CoNLL-2003 en NER
 :---: | :---: | :---: | :---: | :---:
-Precision (%) | - | 89.0 | 89.8 | 92.0
-Recall (%) | - | 88.6 | 90.0 | 90.8
-F1 (%) | - | 88.8 | 89.9 | 91.4
+Precision (%) | 96.8 | 89.0 | 89.8 | 92.0
+Recall (%) | 96.4 | 88.6 | 90.0 | 90.8
+F1 (%) | 96.6 | 88.8 | 89.9 | 91.4
 
 > CoNLL-2002 Spanish and Dutch NER use [`multi_cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_11_23/multi_cased_L-12_H-768_A-12.zip) pre-trained model (base, 
@@ -132,7 +134,7 @@ output classifier or data pre-processing strategies.
 
 Dataset | CR | MR | SST2 | SST5 | SUBJ | TREC
 :---: | :---: | :---: | :---: | :---: | :---: | :---:
-Dev Accuracy (%) | - | - | 91.3 | 50.1 | - | -
+Dev Accuracy (%) | _N.A._ | _N.A._ | 91.3 | 50.1 | _N.A._ | _N.A._
 Test Accuracy (%) | 89.2 | 85.4 | 93.5 | 53.3 | 97.3 | 96.6
 
 > All the tasks use [`uncased_L-12_H-768_A-12.zip`](
@@ -143,17 +145,20 @@ uncased).
 
 Dataset | MRPC | SICK | SNLI | CoLA
 :---: | :---: | :---: | :---: | :---:
-Dev Accuracy (%) | - | 86.4 | - | -
-Test Accuracy (%) | - | 87.0 | - | -
+Dev Accuracy (%) | _N.A._ | 86.4 | - | 83.1
+Test Accuracy (%) | 84.7 | 87.0 | - | 78.9
 
 > All the tasks use [`uncased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
-uncased).
+uncased). 
+
+The results may differ from the reported results, since I do not use the _GLUE version_ datasets.
 
 ## Reference
 - [[google-research/bert]](https://github.com/google-research/bert).
 - [[macanv/BERT-BiLSTM-CRF-NER]](https://github.com/macanv/BERT-BiLSTM-CRF-NER).
 - [[Kyubyong/bert_ner]](https://github.com/Kyubyong/bert_ner).
 - [[kyzhouhzau/BERT-NER]](https://github.com/kyzhouhzau/BERT-NER).
-- [[nyu-mll/GLUE-baselines]](https://github.com/nyu-mll/GLUE-baselines).
+- [[nyu-mll/GLUE-baselines]](https://github.com/nyu-mll/GLUE-baselines), the _MRPC_ data can be download [[here]](
+https://github.com/jaisong87/prDetect/tree/master/Preprocess).
 - [[facebookresearch/SentEval]](https://github.com/facebookresearch/SentEval).
