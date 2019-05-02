@@ -30,26 +30,31 @@ bert_classification/
 
 Dataset | Language | Classes | Training tokens | Dev tokens | Test tokens
 :---: | :---: | :---: | :---: | :---: | :---:
-CoNLL-2000 Chunk | English (en) | 23 | 211727 | _N.A._ | 47377
-CoNLL-2002 NER | Spanish (es) | 9 | 207484 (18797) | 51645 (4351) | 52098 (3558)
-CoNLL-2002 NER | Dutch (nl) | 9 | 202931 (13344) | 37761 (2616) | 68994 (3941)
-CoNLL-2003 NER | English (en) | 9 | 204567 (23499) | 51578 (5942) | 46666 (5648)
+CoNLL-2000 Chunk | English (en) | 23 | 211,727 | _N.A._ | 47,377
+CoNLL-2002 NER | Spanish (es) | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
+CoNLL-2002 NER | Dutch (nl) | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
+CoNLL-2003 NER | English (en) | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
+Chinese NER 1 | Chinese (zh) | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
+Chinese NER 2 | Chinese (zh) | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
 
 > _CoNLL-2000 Chunk_ and _CoNLL-2002 NER_ datasets are obtained from [[teropa/nlp/resources/corpora]](
 https://github.com/teropa/nlp/tree/master/resources/corpora), _CoNLL-2003 NER_ dataset is obtained from 
-[[synalp/NER/corpus/CoNLL-2003]](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003). All the lines in those 
-datasets are convert to `(word, label)` pairs with `\t` as separator and drop all the `-DOCSTART-` lines.
+[[synalp/NER/corpus/CoNLL-2003]](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003), 2 _Chinese NER_ datasets
+are obtained from [[lancopku/Chinese-Literature-NER-RE-Dataset]](
+https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset) and [[zjy-ucas/ChineseNER]](
+https://github.com/zjy-ucas/ChineseNER), respectively. All the lines in those datasets are convert to `(word, label)` 
+pairs with `\t` as separator and drop all the `-DOCSTART-` lines.
 
 **Sentence level classification datasets**:
 
 Dataset | Classes | Average sentence length | Train size | Dev size | Test size
 :---: | :---: | :---: | :---: | :---: | :---:
-CR | 2 | 19 | 3395 | _N.A._ | 377
-MR | 2 | 20 | 9595 | _N.A._ | 1066
-SST2 | 2 | 11 | 67349 | 872 | 1821
-SST5 | 5 | 18 | 8544 | 1101 | 2210
-SUBJ | 2 | 23 | 9000 | _N.A._ | 1000
-TREC | 6 | 10 | 5452 | _N.A._ | 500
+CR | 2 | 19 | 3,395 | _N.A._ | 377
+MR | 2 | 20 | 9,595 | _N.A._ | 1,066
+SST2 | 2 | 11 | 67,349 | 872 | 1,821
+SST5 | 5 | 18 | 8,544 | 1,101 | 2,210
+SUBJ | 2 | 23 | 9,000 | _N.A._ | 1,000
+TREC | 6 | 10 | 5,452 | _N.A._ | 500
 
 > All the datasets are converted to `utf-8` format. For the _SUBJ_, _MR_ and _CR_ datasets, `90%` for train, `10%` 
 for test, while the dev dataset is the duplicate of test dataset. For _TREC_ dataset, the dev dataset is the duplicate 
@@ -60,10 +65,10 @@ https://github.com/facebookresearch/SentEval).
 
 Dataset | Classes | Train size | Dev size | Test size
 :---: | :---: | :---: | :---: | :---:
-MRPC | 2 | 4077 | 1726 | 1726
-SICK | 3 | 4501 | 501 | 4928
-SNLI | 3 | 549367 | 9842 | 9824
-CoLA | 2 | 8551 | 527 | 516
+MRPC | 2 | 4,077 | 1,726 | 1,726
+SICK | 3 | 4,501 | 501 | 4,928
+SNLI | 3 | 549,367 | 9,842 | 9,824
+CoLA | 2 | 8,551 | 527 | 516
 
 > _MRPC_, _SICK_ and _SNLI_ are obtained from [[facebookresearch/SentEval]](
 https://github.com/facebookresearch/SentEval), _CoLA_ us obtained from [[nyu-mll/GLUE-baselines]](
@@ -90,6 +95,10 @@ python3 run_sequence_tagger.py --task_name ner  \  # task name
                                --use_crf True  # if use CRF for decoding
 ```
 
+The token-level classification model contains two modules, one is using CRF for decode while another use a classifier 
+directly. The output sequence of bert model is first fed into a dense layer and then decode by CRF/classifier, no 
+intermediate RNN layers are used.
+
 For sentence-level classification, run:
 ```bash
 python3 run_text_classifier.py --task_name mrpc  \  # task name
@@ -107,23 +116,27 @@ python3 run_text_classifier.py --task_name mrpc  \  # task name
                                --num_train_epochs 6  # number of epochs
 ```
 
+The sentence-level classification directly take the pooled output of bert model and feed it into a classifier for 
+decode.
+
 ## Experiment Results
 
 > All the experiments are running on `1` GeForce GTX 1080 Ti GPU.
 
 **Token level classification datasets**
 
-Dataset | CoNLL-2000 en Chunk | CoNLL-2002 es NER | CoNLL-2002 nl NER | CoNLL-2003 en NER
-:---: | :---: | :---: | :---: | :---:
-Precision (%) | 96.8 | 89.0 | 89.8 | 92.0
-Recall (%) | 96.4 | 88.6 | 90.0 | 90.8
-F1 (%) | 96.6 | 88.8 | 89.9 | 91.4
+Dataset | CoNLL2000 en | CoNLL2002 es | CoNLL2002 nl | CoNLL2003 en | zh 1 | zh 2
+:---: | :---: | :---: | :---: | :---: | :---: | :---:
+Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | - | 95.7
+Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | - | 95.7
+F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | - | 95.7
 
 > CoNLL-2002 Spanish and Dutch NER use [`multi_cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_11_23/multi_cased_L-12_H-768_A-12.zip) pre-trained model (base, 
 multilingual, cased)  while CoNLL-2000 Chunk and CoNLL-2003 NER utilize [`cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
-cased).
+cased), Chinese NER uses [`chinese_L-12_H-768_A-12.zip`](
+https://storage.googleapis.com/bert_models/2018_11_03/chinese_L-12_H-768_A-12.zip) pre-trained model (base, Chinese).
 
 The testing results on CoNLL-2003 English NER are lower than the reported score of the [paper](
 https://arxiv.org/pdf/1810.04805.pdf) (`91.4%` v.s. `92.4%`). As the paper says a `0.2%` difference is reasonable, 
@@ -162,3 +175,6 @@ The results may differ from the reported results, since I do not use the _GLUE v
 - [[nyu-mll/GLUE-baselines]](https://github.com/nyu-mll/GLUE-baselines), the _MRPC_ data can be download [[here]](
 https://github.com/jaisong87/prDetect/tree/master/Preprocess).
 - [[facebookresearch/SentEval]](https://github.com/facebookresearch/SentEval).
+- [[lancopku/Chinese-Literature-NER-RE-Dataset]](https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset), ref. 
+[datasets/Chinese_NER_1](/datasets/Chinese_NER_1).
+-[[zjy-ucas/ChineseNER]](https://github.com/zjy-ucas/ChineseNER), ref. [datasets/Chinese_NER_2](/datasets/Chinese_NER_2).
