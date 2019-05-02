@@ -34,6 +34,7 @@ CoNLL-2000 Chunk | English (en) | 23 | 211,727 | _N.A._ | 47,377
 CoNLL-2002 NER | Spanish (es) | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
 CoNLL-2002 NER | Dutch (nl) | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
 CoNLL-2003 NER | English (en) | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
+CoNLL-2003 NER | German (de) | 9 | - | - | -
 Chinese NER 1 | Chinese (zh) | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
 Chinese NER 2 | Chinese (zh) | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
 
@@ -125,13 +126,13 @@ decode.
 
 **Token level classification datasets**
 
-Dataset | CoNLL2000 en | CoNLL2002 es | CoNLL2002 nl | CoNLL2003 en | zh 1 | zh 2
-:---: | :---: | :---: | :---: | :---: | :---: | :---:
-Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | 77.9 | 95.7
-Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | 73.1 | 95.7
-F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | 75.5 | 95.7
+Dataset | en Chunk | es NER | nl NER | en NER | de NER | zh NER 1 | zh NER 2
+:---: | :---: | :---: | :---: | :---: | :---: | :---: | :---:
+Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | - | 77.9 | 95.7
+Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | - | 73.1 | 95.7
+F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | - | 75.5 | 95.7
 
-> CoNLL-2002 Spanish and Dutch NER use [`multi_cased_L-12_H-768_A-12.zip`](
+> CoNLL-2002 Spanish/Dutch and CoNLL-2003 German NER use [`multi_cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_11_23/multi_cased_L-12_H-768_A-12.zip) pre-trained model (base, 
 multilingual, cased)  while CoNLL-2000 Chunk and CoNLL-2003 NER utilize [`cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
