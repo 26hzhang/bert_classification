@@ -30,14 +30,14 @@ bert_classification/
 
 Dataset | Language | Classes | Training tokens | Dev tokens | Test tokens
 :---: | :---: | :---: | :---: | :---: | :---:
-CoNLL-2000 Chunk (en Chunk) | English (en) | 23 | 211,727 | _N.A._ | 47,377
-CoNLL-2002 NER (es NER) | Spanish (es) | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
-CoNLL-2002 NER (nl NER) | Dutch (nl) | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
-CoNLL-2003 NER (en NER) | English (en) | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
-CoNLL-2003 NER (de NER) | German (de) | 9 |  208,836 (16,839) | 51,444 (6,588) | 51,943 (5,171)
-GermEval-2014 NER (de-ge NER) | German (de) | 25 | 452,853 (42,089) | 41,653 (3,960) | 96,499 (8,969)
-Chinese NER 1 (zh NER 1) | Chinese (zh) | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
-Chinese NER 2 (Zh NER 2) | Chinese (zh) | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
+CoNLL-2000 Chunk (en Chunk) | English | 23 | 211,727 | _N.A._ | 47,377
+CoNLL-2002 NER (es NER) | Spanish | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
+CoNLL-2002 NER (nl NER) | Dutch | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
+CoNLL-2003 NER (en NER) | English | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
+CoNLL-2003 NER (de NER) | German | 9 |  208,836 (16,839) | 51,444 (6,588) | 51,943 (5,171)
+GermEval-2014 NER (de-ge NER) | German | 25 | 452,853 (42,089) | 41,653 (3,960) | 96,499 (8,969)
+Chinese NER 1 (zh NER 1) | Chinese | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
+Chinese NER 2 (Zh NER 2) | Chinese | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
 
 > All the lines in those datasets are convert to `(word, label)` pairs with `\t` as separator and drop all the lines
 start with `-DOCSTART-` and other undesired lines, while the label is in BIO2 format (Begin, Inside, Others).
