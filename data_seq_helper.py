@@ -413,3 +413,65 @@ def file_writer(output_predict_file, result, batch_tokens, batch_labels, id2labe
             predictions.extend(pred)
         for i, prediction in enumerate(predictions):
             _write_base(batch_tokens, id2label, prediction, batch_labels, wf, i)
+
+
+def iob_to_iobes(labels):
+    """IOB -> IOBES"""
+    iob_to_iob2(labels)
+    new_tags = []
+    for i, tag in enumerate(labels):
+        if tag == 'O':
+            new_tags.append(tag)
+        elif tag.split('-')[0] == 'B':
+            if i + 1 != len(labels) and labels[i + 1].split('-')[0] == 'I':
+                new_tags.append(tag)
+            else:
+                new_tags.append(tag.replace('B-', 'S-'))
+        elif tag.split('-')[0] == 'I':
+            if i + 1 < len(labels) and labels[i + 1].split('-')[0] == 'I':
+                new_tags.append(tag)
+            else:
+                new_tags.append(tag.replace('I-', 'E-'))
+        else:
+            raise Exception('Invalid IOB format!')
+    return new_tags
+
+
+def iob_to_iob2(labels):
+    """Check that tags have a valid IOB format. Tags in IOB1 format are converted to IOB2."""
+    for i, tag in enumerate(labels):
+        if tag == 'O':
+            continue
+        split = tag.split('-')
+        if len(split) != 2 or split[0] not in ['I', 'B']:
+            return False
+        if split[0] == 'B':
+            continue
+        elif i == 0 or labels[i - 1] == 'O':  # conversion IOB1 to IOB2
+            labels[i] = 'B' + tag[1:]
+        elif labels[i - 1][1:] == tag[1:]:
+            continue
+        else:
+            labels[i] = 'B' + tag[1:]
+    return True
+
+
+def convert_iob_to_iob2(labels):
+    """Check that tags have a valid IOB format. Tags in IOB1 format are converted to IOB2."""
+    new_tags = []
+    for i, tag in enumerate(labels):
+        if tag == 'O':
+            new_tags.append(tag)
+            continue
+        split = tag.split('-')
+        if len(split) != 2 or split[0] not in ['I', 'B']:
+            raise ValueError("Invalid NER tag: {}".format(tag))
+        if split[0] == 'B':
+            new_tags.append(tag)
+        elif i == 0 or labels[i - 1] == 'O':  # conversion IOB1 to IOB2
+            new_tags.append('B' + tag[1:])
+        elif labels[i - 1][1:] == tag[1:]:
+            new_tags.append(tag)
+        else:
+            new_tags.append('B' + tag[1:])
+    return new_tags
