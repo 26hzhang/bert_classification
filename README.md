@@ -38,13 +38,8 @@ CoNLL-2003 NER | German (de) | 9 | - | - | -
 Chinese NER 1 | Chinese (zh) | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
 Chinese NER 2 | Chinese (zh) | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
 
-> _CoNLL-2000 Chunk_ and _CoNLL-2002 NER_ datasets are obtained from [here](
-https://github.com/teropa/nlp/tree/master/resources/corpora), _CoNLL-2003 English NER_ dataset is obtained from 
-[here](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003), _CoNLL-2003 German NER_ dataset is obtained from 
-[here](https://github.com/MaviccPRP/ger_ner_evals), Chinese NER 1 is obtained from [here](
-https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset) and Chinese NER 2 is obtained from [here](
-https://github.com/zjy-ucas/ChineseNER). All the lines in those datasets are convert to `(word, label)` pairs with `\t` 
-as separator and drop all the `-DOCSTART-` lines.
+> All the lines in those datasets are convert to `(word, label)` pairs with `\t` as separator and drop all the 
+`-DOCSTART-` lines.
 
 **Sentence level classification datasets**:
 
@@ -59,8 +54,7 @@ TREC | 6 | 10 | 5,452 | _N.A._ | 500
 
 > All the datasets are converted to `utf-8` format. For the _SUBJ_, _MR_ and _CR_ datasets, `90%` for train, `10%` 
 for test, while the dev dataset is the duplicate of test dataset. For _TREC_ dataset, the dev dataset is the duplicate 
-of test dataset. Those datasets are obtained from [[facebookresearch/SentEval]](
-https://github.com/facebookresearch/SentEval).
+of test dataset.
 
 **Natural language inference (sentence pair classification) datasets**:
 
@@ -71,9 +65,7 @@ SICK | 3 | 4,501 | 501 | 4,928
 SNLI | 3 | 549,367 | 9,842 | 9,824
 CoLA | 2 | 8,551 | 527 | 516
 
-> _MRPC_, _SICK_ and _SNLI_ are obtained from [[facebookresearch/SentEval]](
-https://github.com/facebookresearch/SentEval), _CoLA_ us obtained from [[nyu-mll/GLUE-baselines]](
-https://github.com/nyu-mll/GLUE-baselines). [_MNLI_](https://www.nyu.edu/projects/bowman/multinli/) and [_XNLI_](
+> [_MNLI_](https://www.nyu.edu/projects/bowman/multinli/) and [_XNLI_](
 https://www.nyu.edu/projects/bowman/xnli/) datasets are implemented by the official BERT already, see 
 `run_classifier.py` in [[google-research/bert]](https://github.com/google-research/bert).
 
@@ -173,14 +165,16 @@ The results may differ from the reported results, since I do not use the _GLUE v
 - [[macanv/BERT-BiLSTM-CRF-NER]](https://github.com/macanv/BERT-BiLSTM-CRF-NER).
 - [[Kyubyong/bert_ner]](https://github.com/Kyubyong/bert_ner).
 - [[kyzhouhzau/BERT-NER]](https://github.com/kyzhouhzau/BERT-NER).
-- [[nyu-mll/GLUE-baselines]](https://github.com/nyu-mll/GLUE-baselines), the _MRPC_ data can be download [[here]](
+- Natural language inference datasets are obtained from [[nyu-mll/GLUE-baselines]](
+https://github.com/nyu-mll/GLUE-baselines), and the _MRPC_ data can be download [[here]](
 https://github.com/jaisong87/prDetect/tree/master/Preprocess).
-- [[facebookresearch/SentEval]](https://github.com/facebookresearch/SentEval).
-- [[lancopku/Chinese-Literature-NER-RE-Dataset]](https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset), ref. 
-[datasets/Chinese_NER_1](/datasets/Chinese_NER_1).
-- [[zjy-ucas/ChineseNER]](https://github.com/zjy-ucas/ChineseNER), ref. [datasets/Chinese_NER_2](/datasets/Chinese_NER_2).
-- [[MaviccPRP/ger_ner_evals]](https://github.com/MaviccPRP/ger_ner_evals), ref. CoNLL-2003 German NER dataset.
-- [[teropa/nlp]](https://github.com/teropa/nlp), ref. CoNLL-2000 Chunk and CoNLL-2002 NER datasets.
-- [[synalp/NER/corpus/CoNLL-2003]](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003), ref. CoNLL-2003 English 
-NER dartaset.
+- Sentence level classification datasets are obtained from [[facebookresearch/SentEval]](
+https://github.com/facebookresearch/SentEval).
+- Chinese NER 1 is obtained from [[lancopku/Chinese-Literature-NER-RE-Dataset]](
+https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset).
+- Chinese NER 2 is obtained from[[zjy-ucas/ChineseNER]](https://github.com/zjy-ucas/ChineseNER).
+- CoNLL-2003 German NER dataset is obtained from [[MaviccPRP/ger_ner_evals]](https://github.com/MaviccPRP/ger_ner_evals).
+- CoNLL-2000 Chunk and CoNLL-2002 NER datasets are obtained from [[teropa/nlp]](https://github.com/teropa/nlp).
+- CoNLL-2003 English NER dartaset is obtained from [[synalp/NER/corpus/CoNLL-2003]](
+https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003).
 
