@@ -171,7 +171,7 @@ The results may differ from the reported results, since I do not use the _GLUE v
 - [[Kyubyong/bert_ner]](https://github.com/Kyubyong/bert_ner).
 - [[kyzhouhzau/BERT-NER]](https://github.com/kyzhouhzau/BERT-NER).
 - Natural language inference datasets are obtained from [[nyu-mll/GLUE-baselines]](
-https://github.com/nyu-mll/GLUE-baselines), and _MRPC_ data can be download [[here]](
+https://github.com/nyu-mll/GLUE-baselines), _MRPC_ data can be download [[here]](
 https://github.com/jaisong87/prDetect/tree/master/Preprocess).
 - Sentence level classification datasets are obtained from [[facebookresearch/SentEval]](
 https://github.com/facebookresearch/SentEval).
