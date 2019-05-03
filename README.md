@@ -30,16 +30,17 @@ bert_classification/
 
 Dataset | Language | Classes | Training tokens | Dev tokens | Test tokens
 :---: | :---: | :---: | :---: | :---: | :---:
-CoNLL-2000 Chunk | English (en) | 23 | 211,727 | _N.A._ | 47,377
-CoNLL-2002 NER | Spanish (es) | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
-CoNLL-2002 NER | Dutch (nl) | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
-CoNLL-2003 NER | English (en) | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
-CoNLL-2003 NER | German (de) | 9 | - | - | -
-Chinese NER 1 | Chinese (zh) | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
-Chinese NER 2 | Chinese (zh) | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
+CoNLL-2000 Chunk (en Chunk) | English (en) | 23 | 211,727 | _N.A._ | 47,377
+CoNLL-2002 NER (es NER) | Spanish (es) | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
+CoNLL-2002 NER (nl NER) | Dutch (nl) | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
+CoNLL-2003 NER (en NER) | English (en) | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
+CoNLL-2003 NER (de NER) | German (de) | 9 |  208,836 (16,839) | 51,444 (6,588) | 51,943 (5,171)
+GermEval-2014 NER (de-ge NER) | German (de) | 25 | 452,853 (42,089) | 41,653 (3,960) | 96,499 (8,969)
+Chinese NER 1 (zh NER 1) | Chinese (zh) | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
+Chinese NER 2 (Zh NER 2) | Chinese (zh) | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
 
-> All the lines in those datasets are convert to `(word, label)` pairs with `\t` as separator and drop all the 
-`-DOCSTART-` lines.
+> All the lines in those datasets are convert to `(word, label)` pairs with `\t` as separator and drop all the lines
+start with `-DOCSTART-` and other undesired lines, while the label is in BIO2 format (Begin, Inside, Others).
 
 **Sentence level classification datasets**:
 
@@ -52,9 +53,9 @@ SST5 | 5 | 18 | 8,544 | 1,101 | 2,210
 SUBJ | 2 | 23 | 9,000 | _N.A._ | 1,000
 TREC | 6 | 10 | 5,452 | _N.A._ | 500
 
-> All the datasets are converted to `utf-8` format. For the _SUBJ_, _MR_ and _CR_ datasets, `90%` for train, `10%` 
-for test, while the dev dataset is the duplicate of test dataset. For _TREC_ dataset, the dev dataset is the duplicate 
-of test dataset.
+> All the datasets are converted to `utf-8` format via `iconv -f <src format> -t utf-8 filename -o save_name`. For the 
+_SUBJ_, _MR_ and _CR_ datasets, `90%` for train, `10%` for test, while the dev dataset is the duplicate of test dataset. 
+For _TREC_ dataset, the dev dataset is the duplicate of test dataset.
 
 **Natural language inference (sentence pair classification) datasets**:
 
@@ -75,15 +76,15 @@ For token-level classification, run:
 python3 run_sequence_tagger.py --task_name ner  \  # task name
                                --data_dir datasets/CoNLL2003_en  \  # dataset folder
                                --output_dir checkpoint/conll2003_en  \  # path to save outputs and trained params
-                               --bert_config_file bert_ckpt/base_cased/bert_config.json  \  # pre-trained BERT configs
-                               --init_checkpoint bert_ckpt/base_cased/bert_model.ckpt  \  # pre-trained BERT params
-                               --vocab_file bert_ckpt/base_cased/vocab.txt  \  # BERT vocab file
+                               --bert_config_file bert_ckpt/cased_L-12_H-768_A-12/bert_config.json  \  # pre-trained BERT configs
+                               --init_checkpoint bert_ckpt/cased_L-12_H-768_A-12/bert_model.ckpt  \  # pre-trained BERT params
+                               --vocab_file bert_ckpt/cased_L-12_H-768_A-12/vocab.txt  \  # BERT vocab file
                                --do_lower_case False  \  # whether lowercase the input tokens
                                --max_seq_length 128  \  # maximal sequence allowed
                                --do_train True  \  # if training
                                --do_eval True  \  # if evaluation
                                --do_predict True  \  # if prediction
-                               --batch_size 32  \  # batch_size
+                               --batch_size 32  \  # batch_size, change to `16` if OOM happens
                                --num_train_epochs 6  \  # number of epochs
                                --use_crf True  # if use CRF for decoding
 ```
@@ -97,15 +98,15 @@ For sentence-level classification, run:
 python3 run_text_classifier.py --task_name mrpc  \  # task name
                                --data_dir datasets/MRPC  \  # dataset folder
                                --output_dir checkpoint/mrpc  \  # path to save outputs and trained params
-                               --bert_config_file bert_ckpt/base_uncased/bert_config.json  \  # pre-trained BERT configs
-                               --init_checkpoint bert_ckpt/base_uncased/bert_model.ckpt  \  # pre-trained BERT params
-                               --vocab_file bert_ckpt/base_uncased/vocab.txt  \  # BERT vocab file
+                               --bert_config_file bert_ckpt/uncased_L-12_H-768_A-12/bert_config.json  \  # pre-trained BERT configs
+                               --init_checkpoint bert_ckpt/uncased_L-12_H-768_A-12/bert_model.ckpt  \  # pre-trained BERT params
+                               --vocab_file bert_ckpt/uncased_L-12_H-768_A-12/vocab.txt  \  # BERT vocab file
                                --do_lower_case True  \  # whether lowercase the input tokens
                                --max_seq_length 128  \  # maximal sequence allowed
                                --do_train True  \  # if training
                                --do_eval True  \  # if evaluation
                                --do_predict True  \  # if prediction
-                               --batch_size 32  \  # batch_size
+                               --batch_size 32  \  # batch_size, change to `16` if OOM happens
                                --num_train_epochs 6  # number of epochs
 ```
 
@@ -118,17 +119,21 @@ decode.
 
 **Token level classification datasets**
 
-Dataset | en Chunk | es NER | nl NER | en NER | de NER | zh NER 1 | zh NER 2
-:---: | :---: | :---: | :---: | :---: | :---: | :---: | :---:
-Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | - | 77.9 | 95.7
-Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | - | 73.1 | 95.7
-F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | - | 75.5 | 95.7
+Dataset | en Chunk | es NER | nl NER | en NER | de NER | de-ge NER | zh NER 1 | zh NER 2
+:---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---:
+Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | 82.0 | 86.2 | 77.9 | 95.7
+Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | 86.4 | 85.4 | 73.1 | 95.7
+F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | 84.2 | 85.8 | 75.5 | 95.7
 
-> CoNLL-2002 Spanish/Dutch and CoNLL-2003 German NER use [`multi_cased_L-12_H-768_A-12.zip`](
+> CoNLL-2002 Spanish/Dutch, CoNLL-2003 German NER and GermEval-2014 German NER use [`multi_cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_11_23/multi_cased_L-12_H-768_A-12.zip) pre-trained model (base, 
-multilingual, cased)  while CoNLL-2000 Chunk and CoNLL-2003 NER utilize [`cased_L-12_H-768_A-12.zip`](
+multilingual, cased)
+
+> CoNLL-2000 Chunk and CoNLL-2003 NER utilize [`cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
-cased), Chinese NER uses [`chinese_L-12_H-768_A-12.zip`](
+cased)
+
+> Chinese NER uses [`chinese_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_11_03/chinese_L-12_H-768_A-12.zip) pre-trained model (base, Chinese).
 
 The testing results on CoNLL-2003 English NER are lower than the reported score of the [paper](
@@ -174,7 +179,7 @@ https://github.com/facebookresearch/SentEval).
 https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset).
 - Chinese NER 2 is obtained from[[zjy-ucas/ChineseNER]](https://github.com/zjy-ucas/ChineseNER).
 - CoNLL-2003 German NER dataset is obtained from [[MaviccPRP/ger_ner_evals]](https://github.com/MaviccPRP/ger_ner_evals).
+- [GermEval 2014 Named Entity Recognition Shared Task](https://sites.google.com/site/germeval2014ner/data).
 - CoNLL-2000 Chunk and CoNLL-2002 NER datasets are obtained from [[teropa/nlp]](https://github.com/teropa/nlp).
 - CoNLL-2003 English NER dartaset is obtained from [[synalp/NER/corpus/CoNLL-2003]](
 https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003).
-
