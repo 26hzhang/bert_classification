@@ -51,6 +51,8 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids, l
     if is_training:
         embedding = tf.nn.dropout(embedding, keep_prob=0.9)
 
+    # If you want, you can add BiLSTM layers here, do not forget to config the hidden size
+
     embedding = tf.reshape(embedding, shape=[-1, hidden_size])  # [batch_size x max_seq_length, hidden_size]
 
     output_weights = tf.get_variable(name="output_weights",
