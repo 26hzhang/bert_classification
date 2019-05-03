@@ -38,13 +38,13 @@ CoNLL-2003 NER | German (de) | 9 | - | - | -
 Chinese NER 1 | Chinese (zh) | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
 Chinese NER 2 | Chinese (zh) | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
 
-> _CoNLL-2000 Chunk_ and _CoNLL-2002 NER_ datasets are obtained from [[teropa/nlp/resources/corpora]](
-https://github.com/teropa/nlp/tree/master/resources/corpora), _CoNLL-2003 NER_ dataset is obtained from 
-[[synalp/NER/corpus/CoNLL-2003]](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003), 2 _Chinese NER_ datasets
-are obtained from [[lancopku/Chinese-Literature-NER-RE-Dataset]](
-https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset) and [[zjy-ucas/ChineseNER]](
-https://github.com/zjy-ucas/ChineseNER), respectively. All the lines in those datasets are convert to `(word, label)` 
-pairs with `\t` as separator and drop all the `-DOCSTART-` lines.
+> _CoNLL-2000 Chunk_ and _CoNLL-2002 NER_ datasets are obtained from [here](
+https://github.com/teropa/nlp/tree/master/resources/corpora), _CoNLL-2003 English NER_ dataset is obtained from 
+[here](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003), _CoNLL-2003 German NER_ dataset is obtained from 
+[here](https://github.com/MaviccPRP/ger_ner_evals), Chinese NER 1 is obtained from [here](
+https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset) and Chinese NER 2 is obtained from [here](
+https://github.com/zjy-ucas/ChineseNER). All the lines in those datasets are convert to `(word, label)` pairs with `\t` 
+as separator and drop all the `-DOCSTART-` lines.
 
 **Sentence level classification datasets**:
 
@@ -178,4 +178,9 @@ https://github.com/jaisong87/prDetect/tree/master/Preprocess).
 - [[facebookresearch/SentEval]](https://github.com/facebookresearch/SentEval).
 - [[lancopku/Chinese-Literature-NER-RE-Dataset]](https://github.com/lancopku/Chinese-Literature-NER-RE-Dataset), ref. 
 [datasets/Chinese_NER_1](/datasets/Chinese_NER_1).
--[[zjy-ucas/ChineseNER]](https://github.com/zjy-ucas/ChineseNER), ref. [datasets/Chinese_NER_2](/datasets/Chinese_NER_2).
+- [[zjy-ucas/ChineseNER]](https://github.com/zjy-ucas/ChineseNER), ref. [datasets/Chinese_NER_2](/datasets/Chinese_NER_2).
+- [[MaviccPRP/ger_ner_evals]](https://github.com/MaviccPRP/ger_ner_evals), ref. CoNLL-2003 German NER dataset.
+- [[teropa/nlp]](https://github.com/teropa/nlp), ref. CoNLL-2000 Chunk and CoNLL-2002 NER datasets.
+- [[synalp/NER/corpus/CoNLL-2003]](https://github.com/synalp/NER/tree/master/corpus/CoNLL-2003), ref. CoNLL-2003 English 
+NER dartaset.
+
