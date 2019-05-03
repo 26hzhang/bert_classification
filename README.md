@@ -30,14 +30,14 @@ bert_classification/
 
 Dataset | Language | Classes | Training tokens | Dev tokens | Test tokens
 :---: | :---: | :---: | :---: | :---: | :---:
-CoNLL2000 Chunk (en Chunk) | English | 23 | 211,727 | _N.A._ | 47,377
-CoNLL2002 NER (es NER) | Spanish | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
-CoNLL2002 NER (nl NER) | Dutch | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
-CoNLL2003 NER (en NER) | English | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
-CoNLL2003 NER (de NER) | German | 9 |  208,836 (16,839) | 51,444 (6,588) | 51,943 (5,171)
-GermEval2014 NER (de_ NER) | German | 25 | 452,853 (42,089) | 41,653 (3,960) | 96,499 (8,969)
-Chinese NER 1 (zh NER 1) | Chinese | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
-Chinese NER 2 (Zh NER 2) | Chinese | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
+CoNLL2000 Chunk (en) | English | 23 | 211,727 | _N.A._ | 47,377
+CoNLL2002 NER (es) | Spanish | 9 | 207,484 (18,797) | 51,645 (4,351) | 52098 (3,558)
+CoNLL2002 NER (nl) | Dutch | 9 | 20,2931 (13,344) | 37,761 (2,616) | 68,994 (3,941)
+CoNLL2003 NER (en) | English | 9 | 20,4567 (23,499) | 51,578 (5,942) | 46,666 (5,648)
+CoNLL2003 NER (de 1) | German | 9 |  208,836 (16,839) | 51,444 (6,588) | 51,943 (5,171)
+GermEval2014 NER (de 2) | German | 25 | 452,853 (42,089) | 41,653 (3,960) | 96,499 (8,969)
+Chinese NER 1 (zh 1) | Chinese | 21 | 1,044,967 (311,637) | 86,454 (24,444) | 119,467 (38,854)
+Chinese NER 2 (Zh 2) | Chinese | 7 | 979,180 (110,093) | 109,870 (12,059) | 219,197 (25,012)
 
 > All the lines in those datasets are convert to `(word, label)` pairs with `\t` as separator and drop all the lines
 start with `-DOCSTART-` and other undesired lines, while the label is in BIO2 format (Begin, Inside, Others).
@@ -119,17 +119,17 @@ decode.
 
 **Token level classification datasets**
 
-Dataset | en Chunk | es NER | nl NER | en NER | de NER | de_ NER | zh NER 1 | zh NER 2
+Dataset | en Chunk | es NER | nl NER | en NER | de NER 1 | de NER 2 | zh NER 1 | zh NER 2
 :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---:
 Precision (%) | 96.8 | 89.0 | 89.8 | 92.0 | 82.0 | 86.2 | 77.9 | 95.7
 Recall (%) | 96.4 | 88.6 | 90.0 | 90.8 | 86.4 | 85.4 | 73.1 | 95.7
 F1 (%) | 96.6 | 88.8 | 89.9 | 91.4 | 84.2 | 85.8 | 75.5 | 95.7
 
-> CoNLL-2002 Spanish/Dutch, CoNLL-2003 German NER and GermEval-2014 German NER use [`multi_cased_L-12_H-768_A-12.zip`](
+> CoNLL2002 Spanish/Dutch, CoNLL2003 German NER and GermEval2014 German NER use [`multi_cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_11_23/multi_cased_L-12_H-768_A-12.zip) pre-trained model (base, 
 multilingual, cased)
 
-> CoNLL-2000 Chunk and CoNLL-2003 NER utilize [`cased_L-12_H-768_A-12.zip`](
+> CoNLL2000 Chunk and CoNLL2003 NER utilize [`cased_L-12_H-768_A-12.zip`](
 https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip) pre-trained model (base, English, 
 cased)
 
