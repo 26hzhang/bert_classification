@@ -475,3 +475,19 @@ def convert_iob_to_iob2(labels):
         else:
             new_tags.append('B' + tag[1:])
     return new_tags
+
+
+def convert_iob2_or_iobes_to_iob(labels):
+    new_tags = []
+    for i, tag in enumerate(labels):
+        if tag == "O":
+            new_tags.append(tag)
+        elif tag.startswith("B-"):
+            new_tags.append("I" + tag[1:])
+        elif tag.startswith("I-"):
+            new_tags.append(tag)
+        elif tag.startswith("S-"):
+            new_tags.append("I" + tag[1:])
+        else:
+            raise ValueError("Invalid NER tag: {}".format(tag))
+    return new_tags

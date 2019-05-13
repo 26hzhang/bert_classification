@@ -88,7 +88,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids, l
             mask = tf.cast(input_mask, dtype=tf.float32)  # [batch_sz, max_seq]
             log_probabilities = tf.nn.log_softmax(logits, axis=-1)  # [batch_sz, max_seq, num_labels]
             per_sample_loss = -tf.reduce_sum(one_hot_labels * log_probabilities, axis=-1)  # [batch_sz, max_seq]
-            loss = tf.reduce_sum(per_sample_loss * mask)
+            loss = tf.reduce_sum(per_sample_loss * mask) / FLAGS.batch_size
             predicts = tf.argmax(logits, axis=-1, output_type=tf.int32)
             return loss, logits, predicts
 
