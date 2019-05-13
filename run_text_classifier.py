@@ -1,13 +1,9 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
+import data_cls_helper
 import tensorflow as tf
 from bert import modeling
 from bert import optimization
 from bert import tokenization
-import data_cls_helper
 from data_cls_helper import file_based_input_fn_builder
 from data_cls_helper import file_based_convert_examples_to_features
 

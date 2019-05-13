@@ -1,11 +1,11 @@
 import os
 import pickle
 import subprocess
+import data_seq_helper
 import tensorflow as tf
 from bert import modeling
 from bert import optimization
 from bert import tokenization
-import data_seq_helper
 from data_seq_helper import file_writer
 from data_seq_helper import file_based_input_fn_builder
 from data_seq_helper import filed_based_convert_examples_to_features
