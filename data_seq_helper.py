@@ -279,9 +279,9 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
                 labels.append("X")
 
     # only Account for [CLS] with "- 1".
-    if len(tokens) >= max_seq_length - 1:
-        tokens = tokens[0:(max_seq_length - 1)]
-        labels = labels[0:(max_seq_length - 1)]
+    if len(tokens) >= max_seq_length - 2:
+        tokens = tokens[0:(max_seq_length - 2)]
+        labels = labels[0:(max_seq_length - 2)]
 
     ntokens = []
     segment_ids = []
@@ -295,9 +295,9 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
         segment_ids.append(0)
         label_ids.append(label_map[labels[i]])
 
-    '''ntokens.append("[SEP]")
+    ntokens.append("[SEP]")
     segment_ids.append(0)
-    label_ids.append(label_map["[SEP]"])'''
+    label_ids.append(label_map["[SEP]"])
 
     input_ids = tokenizer.convert_tokens_to_ids(ntokens)
     input_mask = [1] * len(input_ids)
